@@ -22,8 +22,8 @@ phases:
       - echo $publicIp
       - sed -i -e "s/PUBLIC_IP/$publicIp/g" hosts
       - cat hosts
-      - ansible all -m ping  -i hosts -u ubuntu
       - export ANSIBLE_HOST_KEY_CHECKING=False
+      - ansible all -m ping  -i hosts -u ubuntu
       - ansible-playbook -i hosts play.yaml 
       - echo "teste" >> elb.txt
   post_build:
