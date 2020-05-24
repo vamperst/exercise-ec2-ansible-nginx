@@ -43,6 +43,28 @@ Parameters:
     Type: String
     Default: CloudWatchAgentAdminRole
 Resources:
+  ec2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ec2Role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess
+  ec2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      InstanceProfileName: String
+      Path: /
+      Roles: 
+        - !Ref ec2Role
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -50,8 +72,7 @@ Resources:
       SecurityGroups: [!Ref 'InstanceSecurityGroup']
       KeyName: !Ref 'KeyName'
       ImageId: !Ref 'LatestAmiId'
-      IamInstanceProfile:
-        Ref: IAMRole
+      IamInstanceProfile: !Ref ec2InstanceProfile
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-instance'
