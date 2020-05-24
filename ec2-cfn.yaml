@@ -46,6 +46,7 @@ Resources:
   ec2Role:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: !Sub ec2Role-${AWS::StackName}
       AssumeRolePolicyDocument:
         Statement:
           - Action:
@@ -60,7 +61,7 @@ Resources:
   ec2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties: 
-      InstanceProfileName: String
+      InstanceProfileName: !Sub ec2Role-${AWS::StackName}
       Path: /
       Roles: 
         - !Ref ec2Role
