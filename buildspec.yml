@@ -13,9 +13,6 @@ phases:
   pre_build:
     commands:
       - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/.ssh/fiap-lab.pem .ssh/
-      - RUN command CloudFormation
-      - login=$(echo $login | sed 's/-e none/ /g' | tee)
-      - echo $login | bash      
   build:
     commands:
       - cfn-create-or-update --stack-name test-dev --template-body file://ec2-cfn.yaml
