@@ -46,16 +46,15 @@ Resources:
   ec2Role:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ec2Role-${AWS::StackName}
       AssumeRolePolicyDocument:
-        Version: 2012-10-17
         Statement:
-          - Effect: Allow
-            Principal:
-              Service: ec2.amazonaws.com
-            Action:
+          - Action:
               - sts:AssumeRole
-      Path: /
+            Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+        Version: '2012-10-17'
       ManagedPolicyArns:
         - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess
   ec2InstanceProfile:
