@@ -18,7 +18,12 @@ phases:
       - stackName="test-dev"
       - cfn-create-or-update --region us-east-1 --stack-name $stackName --wait --template-body file://ec2-cfn.yaml 
       - aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName
-      - aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName --query "Stacks[0].Outputs[?OutputKey=='PublicIP'].OutputValue" --output text
+      - publicIp=$(aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName --query "Stacks[0].Outputs[?OutputKey=='PublicIP'].OutputValue" --output text)
+      - sed -i 's/PUBLIC_IP/$publicIp/g' hosts
+      - cat hosts
+      - ansible all -m ping  -i hosts -u ubuntu
+      - export ANSIBLE_HOST_KEY_CHECKING=False
+      - ansible-playbook -i hosts play.yaml 
       - echo "teste" >> elb.txt
   post_build:
     commands:

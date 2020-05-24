@@ -1,4 +1,4 @@
 [webservers:vars]
-ansible_ssh_private_key_file=~/.ssh/fiap-lab.pem
+ansible_ssh_private_key_file=.ssh/fiap-lab.pem
 [webservers]
-54.173.42.162
+PUBLIC_IP
