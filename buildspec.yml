@@ -13,6 +13,7 @@ phases:
   pre_build:
     commands:
       - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/.ssh/fiap-lab.pem .ssh/
+      - chmod 400 .ssh/fiap-lab.pem
   build:
     commands:
       - stackName="test-dev"
