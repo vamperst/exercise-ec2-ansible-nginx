@@ -1,0 +1,32 @@
+version: 0.2
+phases:
+  install: 
+    runtime-versions:
+      docker: 18
+    commands: 
+      - apt-get update -y
+      - apt-get install -y jq
+      - apt-add-repository ppa:ansible/ansible
+      - apt-get update -y
+      - apt-get install ansible -y 
+      - ls ~/.aws/
+      - echo $AWS_ACCESS_KEY_ID
+      - echo $AWS_SECRET_ACCESS_KEY
+      - echo $AWS_SESSION_TOKEN
+  pre_build:
+    commands:
+      - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/.ssh/fiap-lab.pem .ssh/
+      - RUN command CloudFormation
+      - login=$(echo $login | sed 's/-e none/ /g' | tee)
+      - echo $login | bash      
+  build:
+    commands:
+     
+      - echo "teste" >> elb.txt
+  post_build:
+    commands:
+      - echo "DONE!!!!"
+    
+artifacts:
+  files: 
+    - elb.txt
