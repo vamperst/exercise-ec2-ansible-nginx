@@ -15,8 +15,10 @@ phases:
       - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/.ssh/fiap-lab.pem .ssh/
   build:
     commands:
-      - cfn-create-or-update --region us-east-1 --stack-name test-dev --wait --template-body file://ec2-cfn.yaml 
-      - aws cloudformation --region us-east-1 describe-stacks --stack-name test-dev
+      - stackName="test-dev"
+      - cfn-create-or-update --region us-east-1 --stack-name $stackName --wait --template-body file://ec2-cfn.yaml 
+      - aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName
+      - aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName --query "Stacks[0].Outputs[?OutputKey=='PublicIP'].OutputValue" --output text
       - echo "teste" >> elb.txt
   post_build:
     commands:
