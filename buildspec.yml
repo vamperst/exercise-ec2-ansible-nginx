@@ -9,9 +9,7 @@ phases:
       - apt-add-repository ppa:ansible/ansible
       - apt-get update -y
       - apt-get install ansible -y 
-      - echo $AWS_ACCESS_KEY_ID
-      - echo $AWS_SECRET_ACCESS_KEY
-      - echo $AWS_SESSION_TOKEN
+      - npm install -g cfn-create-or-update
   pre_build:
     commands:
       - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/.ssh/fiap-lab.pem .ssh/
@@ -20,7 +18,8 @@ phases:
       - echo $login | bash      
   build:
     commands:
-     
+      - cfn-create-or-update --stack-name test-dev --template-body file://ec2-cfn.yaml
+      - aws cloudformation --region us-east-1 describe-stacks --stack-name test-dev
       - echo "teste" >> elb.txt
   post_build:
     commands:
