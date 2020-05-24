@@ -17,7 +17,7 @@ phases:
   build:
     commands:
       - stackName="test-dev"
-      - cfn-create-or-update --region us-east-1 --stack-name $stackName --wait --template-body file://ec2-cfn.yaml 
+      - cfn-create-or-update --region us-east-1 --stack-name $stackName --wait --capabilities CAPABILITY_NAMED_IAM --template-body file://ec2-cfn.yaml 
       - aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName
       - publicIp=$(aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName --query "Stacks[0].Outputs[?OutputKey=='PublicIP'].OutputValue" --output text)
       - echo $publicIp
