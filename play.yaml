@@ -1,0 +1,44 @@
+---
+- hosts: webservers
+  user: ubuntu
+  become: true
+  
+  tasks:
+    - name: Update apt-get repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      
+      
+    - name: Install packages
+      apt: 
+        name: "{{ item }}"
+        state: present
+      loop: 
+        - nginx
+        - awscli
+    
+    - name: Install amazon-cloudwatch-agent
+      apt:     
+        deb: https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+    
+    
+    - name: shellzao do s3
+      shell: aws s3 cp s3://bootcamp-data-engineering-222/amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+      
+    
+    - name: Create a directory if it does not exist
+      file:
+        path: /usr/share/collectd
+        state: directory
+    
+    - name: Touch the same file
+      file:
+        path: /usr/share/collectd/types.db
+        state: touch
+        
+    - name: Shellzao da massa
+      shell: /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s
+      
+    - name: start service
+      service:
+        name: amazon-cloudwatch-agent
+        state: restarted
