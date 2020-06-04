@@ -22,7 +22,7 @@
     
     
     - name: shellzao do s3
-      shell: aws s3 cp s3://bootcamp-data-engineering-222/amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+      shell: aws s3 cp s3://base-config-<SEU RM>/config/amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
       
     
     - name: Create a directory if it does not exist
