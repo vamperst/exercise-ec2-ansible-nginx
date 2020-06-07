@@ -12,8 +12,8 @@ phases:
       - npm install -g cfn-create-or-update
   pre_build:
     commands:
-      - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/keys/fiap-lab.pem .ssh/
-      - chmod 400 .ssh/fiap-lab.pem
+      - mkdir -p /home/ubuntu/.ssh && aws s3 cp s3://$BUCKET/instance-need/keys/fiap-lab.pem /home/ubuntu/.ssh/
+      - chmod 400 /home/ubuntu/.ssh/fiap-lab.pem
   build:
     commands:
       - stackName="cicd-ec2-ansible"
