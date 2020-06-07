@@ -12,11 +12,11 @@ phases:
       - npm install -g cfn-create-or-update
   pre_build:
     commands:
-      - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/.ssh/fiap-lab.pem .ssh/
+      - mkdir .ssh && aws s3 cp s3://$BUCKET/instance-need/keys/fiap-lab.pem .ssh/
       - chmod 400 .ssh/fiap-lab.pem
   build:
     commands:
-      - stackName="test-dev"
+      - stackName="cicd-ec2-ansible"
       - aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName
       - publicIp=$(aws cloudformation --region us-east-1 describe-stacks --stack-name $stackName --query "Stacks[0].Outputs[?OutputKey=='PublicIP'].OutputValue" --output text)
       - echo $publicIp
