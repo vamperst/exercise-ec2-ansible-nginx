@@ -9,7 +9,7 @@ Parameters:
   InstanceType:
     Description: WebServer EC2 instance type
     Type: String
-    Default: t3.micro
+    Default: t2.micro
     AllowedValues: [t2.nano, t2.micro, t2.small, t2.medium, t2.large, t2.xlarge, t2.2xlarge,
       t3.nano, t3.micro, t3.small, t3.medium, t3.large, t3.xlarge, t3.2xlarge,
       m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge, m4.10xlarge,
@@ -36,28 +36,6 @@ Parameters:
     Type: String
     Default: CloudWatchAgentAdminRole
 Resources:
-  ec2Role:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub ec2Role-${AWS::StackName}
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action:
-              - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-        Version: '2012-10-17'
-      ManagedPolicyArns:
-        - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess
-  ec2InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties: 
-      InstanceProfileName: !Sub ec2Role-${AWS::StackName}
-      Path: /
-      Roles: 
-        - !Ref ec2Role
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -65,7 +43,7 @@ Resources:
       SecurityGroups: [!Ref 'InstanceSecurityGroup']
       KeyName: !Ref 'KeyName'
       ImageId: !Ref 'LatestAmiId'
-      IamInstanceProfile: !Ref ec2InstanceProfile
+      IamInstanceProfile: arn:aws:iam::306674849548:instance-profile/LabInstanceProfile
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-ansible-instance'
