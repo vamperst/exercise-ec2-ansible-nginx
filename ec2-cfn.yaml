@@ -43,7 +43,7 @@ Resources:
       SecurityGroups: [!Ref 'InstanceSecurityGroup']
       KeyName: !Ref 'KeyName'
       ImageId: !Ref 'LatestAmiId'
-      IamInstanceProfile: arn:aws:iam::306674849548:instance-profile/LabInstanceProfile
+      IamInstanceProfile: !Sub "arn:aws:iam::${AWS::AccountId}:instance-profile/LabInstanceProfile"
       Tags:
         - Key: Name
           Value: !Sub '${AWS::StackName}-ansible-instance'
